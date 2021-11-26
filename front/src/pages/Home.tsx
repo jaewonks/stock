@@ -1,16 +1,16 @@
 import React from 'react';
-import Dashboard from './Dashboard';
+import { Outlet } from 'react-router-dom';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 
 const Home = () => {
   return (
-   <> 
-    <Header />
-    <Dashboard/>
-    <Footer />
-   </>
-  )
+    <>
+      <Header />
+      <Outlet />  
+      <Footer/>
+    </>
+  )  
 }
 
 export default Home;

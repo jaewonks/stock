@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { LinkContainer } from '../styles';
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import moment from 'moment';
 
 const Dashboard = () => {
   return (
@@ -10,7 +13,7 @@ const Dashboard = () => {
       <div className="panel panel-success">
         <div className="panel-heading">
           
-          <Link to='Product'>
+          <Link to='product'>
             Total Product
             <span className="badge pull pull-right">
               {/* <?php echo $countProduct; ?> */}
@@ -39,7 +42,7 @@ const Dashboard = () => {
       <div className="panel panel-danger">
         <div className="panel-heading">
           <LinkContainer>
-            <Link to='Product'>
+            <Link to='product'>
               Low Stock
               <span className="badge pull pull-right">
                 {/* <?php echo $countLowStock; ?> */}
@@ -57,7 +60,7 @@ const Dashboard = () => {
         </div>
 
         <div className="cardContainer">
-          <p>{/*<?php echo date('l') .' '.date('d').', '.date('Y'); ?>*/}</p>
+          <p>{moment().format('dddd DD MMM YYYY HH:mm:ss')}{/*<?php echo date('l') .' '.date('d').', '.date('Y'); ?>*/}</p>
         </div>
       </div> 
       <br/>
@@ -72,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         <div className="cardContainer">
-          <p> <i className="glyphicon glyphicon-usd"></i> Total Revenue</p>
+          <p> <i className="glyphicon glyphicon-gbp"></i> Total Revenue</p>
         </div>
       </div> 
 
@@ -82,7 +85,12 @@ const Dashboard = () => {
       <div className="panel panel-default">
         <div className="panel-heading"> <i className="glyphicon glyphicon-calendar"></i> Calendar</div>
         <div className="panel-body">
-          <div id="calendar"></div>
+          <div id="calendar">
+          <FullCalendar
+            plugins={[ dayGridPlugin ]}
+            initialView="dayGridMonth"
+          />
+          </div>
         </div>	
       </div>
       

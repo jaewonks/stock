@@ -3,7 +3,10 @@ import React from 'react'
 const Footer = () => {
   return (
     <div>
-      Footer@SelectInLondon
+      <p></p>
+      <p></p>
+      <p></p>
+      <p>Footer@SelectInLondon</p>
     </div>
   )
 }

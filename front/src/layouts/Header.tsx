@@ -22,9 +22,9 @@ const Header = () => {
 
         <ul className="nav navbar-nav navbar-right">        
 
-          <li id="navDashboard"><Link to=""><i className="glyphicon glyphicon-list-alt"></i>  Dashboard</Link></li>        
+          <li id="navDashboard"><Link to="/"><i className="glyphicon glyphicon-list-alt"></i>  Dashboard</Link></li>        
           
-          <li id="navBrand"><Link to="Brand"><i className="glyphicon glyphicon-btc"></i>  Brand</Link></li>        
+          <li id="navBrand"><Link to="brand"><i className="glyphicon glyphicon-btc"></i>  Brand</Link></li>        
 
           <li id="navCategories"><Link to="categories"> <i className="glyphicon glyphicon-th-list"></i> Category</Link></li>        
 

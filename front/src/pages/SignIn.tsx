@@ -1,12 +1,21 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import useInput from '../hooks/useInput';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
   const [ signInError, setSignInError ] = useState(false);
   const [ username, onChangeUsername ] = useInput('');
   const [ password, onChangePassword ] = useInput('');
 
+  const checkToken = () => {
+    const token = Cookies.get('token');
+    return token && !undefined ? true : false
+  }
+  const [ isSignedIn, setIsSignedIn ] = useState(checkToken());
+
+  let navigate = useNavigate();
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     setSignInError(false);
@@ -16,13 +25,22 @@ const SignIn = () => {
           password
         })
         .then((response) => {
-
+          const userToken = response.data.token;
+          if (userToken !== undefined) {
+          Cookies.set('token', userToken);
+          setIsSignedIn(true);
+          }
+          if(response.data.message) setSignInError(true)
         })
         .catch((error) => {
-          console.log(error.response);
           setSignInError(error.response?.data?.statusCode === 404);
         })
   },[username, password])
+ 
+  useEffect(() => {
+    if(isSignedIn) navigate('/');
+  },[isSignedIn, navigate])
+
 
   return (
     <div>
@@ -34,17 +52,9 @@ const SignIn = () => {
                 <h3 className="panel-title">Sign In Inventory </h3>
               </div>
               <div className="panel-body">
-
-                <div className="messages">
-                  {/*<?php if($errors) {
-                    foreach ($errors as $key => $value) {
-                      echo '<div className="alert alert-warning" role="alert">
-                      <i className="glyphicon glyphicon-exclamation-sign"></i>
-                      '.$value.'</div>';										
-                      }
-                    } ?>*/}
+                <div className="messages"> 
+                {signInError && <p>Wrong username or password</p>}
                 </div>
-
                 <form onSubmit={onSubmit} className="form-horizontal" id="loginForm">
                   <fieldset>
                     <div className="form-group">
@@ -65,8 +75,7 @@ const SignIn = () => {
                       </div>
                     </div>
                   </fieldset>
-                </form>
-                {signInError && <p>Your username and password doesn't match</p>}
+                </form>                
               </div>
               {/*<!-- panel-body -->*/}
             </div>
