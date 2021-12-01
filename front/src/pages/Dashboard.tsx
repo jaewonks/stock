@@ -1,21 +1,35 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { LinkContainer } from '../styles';
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import moment from 'moment';
 
 const Dashboard = () => {
+
+  // const getProducts = () => {
+  //   axios
+  //   .get('api/products')
+  //   .then((response) => {
+  //     if(response.statusText !== 'OK') {
+  //       throw new Error(response.data.message);
+  //     }
+  //     return response.data
+  //   })    
+  //   .catch((error) => {
+  //     return { error: error.response.data.message || error.message }
+  //   })
+  // }
+
   return (
+    <div className="container">
     <div className="row">
       
     <div className="col-md-4">
       <div className="panel panel-success">
         <div className="panel-heading">
-          
-          <Link to='product'>
+          <Link to='product' style={{ textDecoration: 'none', color: 'black' }}>
             Total Product
-            <span className="badge pull pull-right">
+            <span className="badge pull pull-right">2
               {/* <?php echo $countProduct; ?> */}
             </span>	
           </Link>
@@ -27,13 +41,10 @@ const Dashboard = () => {
       <div className="col-md-4">
         <div className="panel panel-info">
         <div className="panel-heading">
-        <LinkContainer>
-          <Link to='order'>
+          <Link to='order' style={{ textDecoration: 'none', color: 'black' }}>
             Total Orders
             <span className="badge pull pull-right">{/*<?php echo $countOrder; ?>*/}</span>
-          </Link>
-        </LinkContainer>  
-            
+          </Link>           
         </div>{/*  <!--/panel-hdeaing--> */}
       </div>
       </div>{/*  <!--/col-md-4--> */}
@@ -41,14 +52,12 @@ const Dashboard = () => {
     <div className="col-md-4">
       <div className="panel panel-danger">
         <div className="panel-heading">
-          <LinkContainer>
-            <Link to='product'>
+            <Link to='product' style={{ textDecoration: 'none', color: 'black' }}>
               Low Stock
               <span className="badge pull pull-right">
                 {/* <?php echo $countLowStock; ?> */}
               </span>	
             </Link>
-          </LinkContainer>
           </div>{/*  <!--/panel-hdeaing--> */}
         </div>{/*  <!--/panel--> */}
       </div>
@@ -66,7 +75,7 @@ const Dashboard = () => {
       <br/>
 
       <div className="card">
-        <div className="cardHeader">
+        <div className="cardHeader"  style={{ backgroundColor: '#245580' }}>
           <h1>{/*<?php if($totalRevenue) {
             echo $totalRevenue;
             } else {
@@ -93,7 +102,7 @@ const Dashboard = () => {
           </div>
         </div>	
       </div>
-      
+      </div>
     </div>	
   </div> 
   )

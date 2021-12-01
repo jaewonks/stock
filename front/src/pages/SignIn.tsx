@@ -30,7 +30,11 @@ const SignIn = () => {
           Cookies.set('token', userToken);
           setIsSignedIn(true);
           }
-          if(response.data.message) setSignInError(true)
+          //if(response.data.message) setSignInError(true)
+          if(response.statusText !== 'OK') {
+            setSignInError(true)
+            throw new Error(response.data.message);
+          }
         })
         .catch((error) => {
           setSignInError(error.response?.data?.statusCode === 404);

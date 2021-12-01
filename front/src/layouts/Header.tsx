@@ -1,7 +1,17 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
 const Header = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    Array.from(document.querySelectorAll("li[id*='nav']")).map((i) => i.classList.remove('active'));
+    const path = location.pathname;
+    const targetId = document.querySelector(`a[href="${path}"]`)?.parentElement?.id;
+    const target = document.querySelector(`#${targetId}`)?.classList;
+    target?.add('active');
+  })
+
   return (
     <>
       <nav className="navbar navbar-default navbar-static-top">
@@ -31,17 +41,17 @@ const Header = () => {
           <li id="navProduct"><Link to="product"> <i className="glyphicon glyphicon-ruble"></i> Product </Link></li>     
 
           <li className="dropdown" id="navOrder">
-            <Link to="" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i className="glyphicon glyphicon-shopping-cart"></i> Orders <span className="caret"></span></Link>
+            <Link to='#' className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i className="glyphicon glyphicon-shopping-cart"></i> Orders <span className="caret"></span></Link>
             <ul className="dropdown-menu">            
-              <li id="topNavAddOrder"><Link to="add-orders"> <i className="glyphicon glyphicon-plus"></i> Add Orders</Link></li>            
-              <li id="topNavManageOrder"><Link to="order"> <i className="glyphicon glyphicon-edit"></i> Manage Orders</Link></li>            
+              <li id="topNavAddOrder"><Link to="order/add"> <i className="glyphicon glyphicon-plus"></i> Add Orders</Link></li>            
+              <li id="topNavManageOrder"><Link to="order/manage"> <i className="glyphicon glyphicon-edit"></i> Manage Orders</Link></li>            
             </ul>
           </li> 
 
           <li id="navReport"><Link to="report"> <i className="glyphicon glyphicon-check"></i> Report </Link></li>
 
           <li className="dropdown" id="navSetting">
-            <Link to="" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i className="glyphicon glyphicon-user"></i> <span className="caret"></span></Link>
+            <Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i className="glyphicon glyphicon-user"></i> <span className="caret"></span></Link>
             <ul className="dropdown-menu">            
               <li id="topNavSetting"><Link to="setting"> <i className="glyphicon glyphicon-wrench"></i> Setting</Link></li>            
               <li id="topNavLogout"><Link to="logout"> <i className="glyphicon glyphicon-log-out"></i> Logout</Link></li>            

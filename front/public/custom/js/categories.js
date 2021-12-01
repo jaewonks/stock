@@ -2,12 +2,12 @@ var manageCategoriesTable;
 
 $(document).ready(function() {
 	// active top navbar categories
-	$('#navCategories').addClass('active');	
+	//$('#navCategories').addClass('active');	
 
-	manageCategoriesTable = $('#manageCategoriesTable').DataTable({
-		'ajax' : 'php_action/fetchCategories.php',
-		'order': []
-	}); // manage categories Data Table
+	// manageCategoriesTable = $('#manageCategoriesTable').DataTable({
+	// 	'ajax' : 'php_action/fetchCategories.php',
+	// 	'order': []
+	// }); // manage categories Data Table
 
 	// on click on submit categories form modal
 	$('#addCategoriesModalBtn').unbind('click').bind('click', function() {

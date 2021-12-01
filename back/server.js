@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mysql from 'mysql';
 import userRouter from './routers/userRouter.js';
+import productRouter from './routers/productRouter.js';
+//import orderRouter from './routers/orderRouter.js';
 
 dotenv.config();
 export const db = mysql.createConnection({
@@ -24,5 +26,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+//app.use('/api/orders', orderRouter);
 
 app.listen(process.env.PORT, () => {console.log(`Listening on http://localhost:${process.env.PORT}`)});

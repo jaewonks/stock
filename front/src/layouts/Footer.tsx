@@ -6,7 +6,7 @@ const Footer = () => {
       <p></p>
       <p></p>
       <p></p>
-      <p>Footer@SelectInLondon</p>
+      <p style={{ textAlign: 'center' }}>Copyright &copy; {new Date().getFullYear()} Select In London All Rights Reserved</p>
     </div>
   )
 }

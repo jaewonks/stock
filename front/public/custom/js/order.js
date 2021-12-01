@@ -5,7 +5,7 @@ $(document).ready(function() {
 	var divRequest = $(".div-request").text();
 
 	// top nav bar 
-	$("#navOrder").addClass('active');
+	//$("#navOrder").addClass('active');
 
 	if(divRequest == 'add')  {
 		// add order	

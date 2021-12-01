@@ -1,7 +1,7 @@
 $(document).ready(function() {
-	// main menu
-	$("#navSetting").addClass('active');
-	// sub manin
+	// // main menu
+	// $("#navSetting").addClass('active');
+	// // sub manin
 	$("#topNavSetting").addClass('active');
 
 	// change username

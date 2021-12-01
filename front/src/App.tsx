@@ -3,14 +3,14 @@ import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard'
 import Brand from './pages/Brand';
-import Order from './pages/Order';
+import Order from './pages/Order/Order';
 import Product from './pages/Product';
 import Report from './pages/Report';
 import Setting from './pages/Setting';
 import Categories from './pages/Categories';
+import AddOrders from './pages/Order/AddOrders';
+import ManageOrders from './pages/Order/ManageOrders';
 import PrivateRoute from './utils/PrivateRoute';
-
-import './App.css';
 
 const App = () => {
   
@@ -22,7 +22,10 @@ const App = () => {
         <Route path='brand' element={<Brand />} />
         <Route path='Categories' element={<Categories/>} />
         <Route path='product' element={<Product/>} />
-        <Route path='order' element={<Order/>} />
+        <Route path='order/*' element={<Order/>}>
+          <Route path='add' element={<AddOrders/>} />
+          <Route path='manage' element={<ManageOrders/>} />
+        </Route>
         <Route path='report' element={<Report/>} />
         <Route path='setting' element={<Setting/>} />
       </Route>
