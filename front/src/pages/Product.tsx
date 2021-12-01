@@ -128,7 +128,7 @@ const Product = () => {
                 <th>Brand</th>
                 <th>Category</th>
                 <th>Barcode</th>
-                <th>Link</th>
+                {/* <th>Link</th> */}
                 <th>Date</th>
                 <th>Status</th>
                 <th style= {{ width: '15%' }}>Options</th>
@@ -138,18 +138,18 @@ const Product = () => {
             { products?.map((product) => {
               return (
                 <tr key={product.product_id}>
-                  <td><img src={product.product_image} alt={product.product_name} /></td>
+                  <td><img src={product.product_image} className='img-round' style={{ height:'30px', width:'50px' }} alt={product.product_name} /></td>
                   <td>{product.product_name}</td>
-                  <td>colur</td>
-                  <td>size</td>
-                  <td>price_UK</td>
-                  <td>price_KR</td>
+                  <td>{product.product_colour}</td>
+                  <td>{product.product_size}</td>
+                  <td>{product.price_uk}</td>
+                  <td>{product.price_kr}</td>
                   <td>{product.quantity}</td>
                   <td>{product.brand_name}</td>
                   <td>{product.categories_name}</td>
-                  <td>barcode</td>
-                  <td>link</td>
-                  <td>date</td>
+                  <td>{product.barcode}</td>
+                  {/* <td>{product.link}</td> */}
+                  <td>{product.product_date.slice(0,10)}</td>
                   <td>{product.status === 1 ? 
                     <label className='label label-success'>Available</label> : <label className='label label-danger'>Not Available</label> }
                   </td>

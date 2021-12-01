@@ -28,7 +28,7 @@ router.post('/', expressAsyncHandler( async (req,res) => {
 
 router.get('/', expressAsyncHandler( async (req,res) => {
   db.query(
-    'SELECT product.product_id, product.product_name, product.product_image, product.brand_id, product.categories_id, product.quantity, product.rate, product.active, product.status, brands.brand_name, categories.categories_name FROM product INNER JOIN brands ON product.brand_id = brands.brand_id INNER JOIN categories ON product.categories_id = categories.categories_id WHERE product.status = 1',
+    'SELECT products.product_id, products.product_date, products.product_name, products.product_image, products.product_colour, products.product_size ,products.price_uk, products.price_kr, products.quantity, products.brand_id, products.categories_id, products.barcode, products.link, products.active, products.status, brands.brand_name, categories.categories_name FROM products INNER JOIN brands ON products.brand_id = brands.brand_id INNER JOIN categories ON products.categories_id = categories.categories_id WHERE products.status = 1',
     (err, result) => {
       if(err) {
         console.log({ error: err });
