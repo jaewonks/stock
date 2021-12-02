@@ -3,7 +3,7 @@ import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard'
 import Brand from './pages/Brand';
-import Order from './pages/Order/Order';
+import Order from './pages/Order';
 import Product from './pages/Product';
 import Report from './pages/Report';
 import Setting from './pages/Setting';

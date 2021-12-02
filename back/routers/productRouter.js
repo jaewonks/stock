@@ -5,17 +5,20 @@ import { db } from '../server.js';
 const router = express.Router();
 
 router.post('/', expressAsyncHandler( async (req,res) => {
-  const productName = req.body.productname;
-  const url = req.body.productimage;
-  const brandName = req.body.brandname;
-  const categoryName = req.body.categoryname;
-  const quantity = parseInt(req.body.quantity);
-  const rate = parseInt(req.body.rate);
-  const productStatus = parseInt(req.body.rate);
-
+  const image = req.body.image;
+  const name = req.body.name;
+  const colour = req.body.colour;
+  const size = req.body.size;
+  const priceUk = req.body.priceUk;
+  const priceKr = req.body.priceKr;
+  const quantity = req.body.quantity;
+  const brandname = req.body.brandname;
+  const categoryname = req.body.categoryname;
+  const status = parseInt(req.body.status);
+  const link = req.body.link;
   db.query(
-    'INSERT INTO product (product_name, product_image, brand_id, categories_id, quantity, rate, active, status) VALUES (?, ?, ?, ?, ?, ?, ?, 1)',
-    [ productName, url, brandName, categoryName, quantity, rate, productStatus, 1 ],
+    "INSERT INTO products (product_name, product_image, product_colour, product_size, price_uk, price_kr, quantity, brand_id, categories_id, link, active, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [ name, image, colour, size, priceUk, priceKr, quantity, brandname, categoryname, link, status, 1 ],
     (err, result) => {
       if(result) {
         res.send(result)
@@ -28,7 +31,7 @@ router.post('/', expressAsyncHandler( async (req,res) => {
 
 router.get('/', expressAsyncHandler( async (req,res) => {
   db.query(
-    'SELECT products.product_id, products.product_date, products.product_name, products.product_image, products.product_colour, products.product_size ,products.price_uk, products.price_kr, products.quantity, products.brand_id, products.categories_id, products.barcode, products.link, products.active, products.status, brands.brand_name, categories.categories_name FROM products INNER JOIN brands ON products.brand_id = brands.brand_id INNER JOIN categories ON products.categories_id = categories.categories_id WHERE products.status = 1',
+    'SELECT products.product_id, products.product_date, products.product_name, products.product_image, products.product_colour, products.product_size ,products.price_uk, products.price_kr, products.quantity, products.brand_id, products.categories_id, products.link, products.active, products.status, brands.brand_name, categories.categories_name FROM products INNER JOIN brands ON products.brand_id = brands.brand_id INNER JOIN categories ON products.categories_id = categories.categories_id WHERE products.status = 1',
     (err, result) => {
       if(err) {
         console.log({ error: err });
@@ -74,7 +77,7 @@ router.get('/brand/:id', expressAsyncHandler( async (req,res) => {
   )
 }));
 
-router.get('/brand/option', expressAsyncHandler( async (req,res) => {
+router.get('/brand_option', expressAsyncHandler( async (req,res) => {
   db.query(
     'SELECT brand_id, brand_name, brand_active, brand_status FROM brands WHERE brand_status = 1 AND brand_active = 1', 
     (err, result) => {
@@ -176,7 +179,7 @@ router.get('/category/:id', expressAsyncHandler( async (req,res) => {
   )
 }));
 
-router.get('/category/option', expressAsyncHandler( async (req,res) => {
+router.get('/category_option', expressAsyncHandler( async (req,res) => {
   db.query(
     'SELECT categories_id, categories_name, categories_active, categories_status FROM categories WHERE categories_status = 1 AND categories_active = 1',
       (err, result) => {
