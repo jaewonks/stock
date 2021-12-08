@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 
-const useInput = (initialValue: any) => {
+const useFile = (initialValue: any) => {
   const [ value, setValue ] = useState(initialValue);
   const handler = useCallback((e) => {
-    setValue((e.target.value));
+    setValue((e.target.files[0]));
   },[])
   return [value, handler, setValue];
 };
 
-export default useInput;
+export default useFile;
 

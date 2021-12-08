@@ -3,16 +3,17 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 //import { Link } from 'react-router-dom';
 import { IBrand, ICate, IProduct } from '../../typings/db';
 import useInput from '../../hooks/useInput'
+import useFile from '../../hooks/useFile'
 import AddProduct from '../../pages/Product/Add';
+import EditProduct from '../../pages/Product/Edit';
 
 const Product = () => {
 
   const [ products, setProducts ] = useState<IProduct[]>([])
   const [ brands, setBrands ] = useState<IBrand[]>([]);
   const [ categories, setCategories ] = useState<ICate[]>([]);
-
-  const [ image, onChangeImage ] = useInput('');
-  const [ name, onChangeName ] = useInput('');
+  const [ image, onChangeImage ] = useFile('');
+  const [ productname, onChangeProductname ] = useInput('');
   const [ colour, onChangeColour ] = useInput('');
   const [ size, onChangeSize ] = useInput('');
   const [ priceUk, onChangePriceUk ] = useInput('');
@@ -22,25 +23,31 @@ const Product = () => {
   const [ categoryname, onChangeCategoryname ] = useInput('');
   //const [ barcode, onChangeBarcode ] = useInput('');
   const [ link, onChangeLink ] = useInput('');
-  const [ status, onChangeStatus ] = useInput('');
+  const [ productstatus, onChangeProductstatus ] = useInput('');
   const formRef = useRef<HTMLDivElement>(null);
+
+  const [ name, setName ] = useState('');
+  const [ status, setStatus ] = useState('');
+  const [ id, setId ] = useState('');
 
   const addSubmit = useCallback((e) => {
     e.preventDefault();
+    const formData = new FormData()
+    // 반복문으로 바꾸기 하...
+    console.log(image)
+    formData.append('image', image);
+    formData.append('productname', productname);
+    formData.append('colour', colour);
+    formData.append('size', size);
+    formData.append('priceUk', priceUk);
+    formData.append('priceKr', priceKr);
+    formData.append('quantity', quantity);
+    formData.append('brandname', brandname);
+    formData.append('categoryname', categoryname);
+    formData.append('productstatus', productstatus);
+    formData.append('link', link);
     axios
-      .post('api/products',{
-        image,
-        name,
-        colour,
-        size,
-        priceUk,
-        priceKr,
-        quantity,
-        brandname,
-        categoryname,
-        status,
-        link
-      })
+      .post('api/products',formData)
       .then((response) => {
         if(response.statusText !== 'OK') {
           throw new Error(response?.data.message)
@@ -50,7 +57,7 @@ const Product = () => {
         throw error.response?.data?.statusCode;
       })
   },[image,
-    name,
+    productname,
     colour,
     size,
     priceUk,
@@ -58,10 +65,63 @@ const Product = () => {
     quantity,
     brandname,
     categoryname,
-    status,
+    productstatus,
     link]);
 
- const getProducts = () => {
+  // const editSummit = useCallback((e) => {
+  // });  
+
+  const editClick = useCallback((id: IProduct['product_id']) => {
+    axios
+    .get(`api/products/product/${id}`)
+    .then((response) => {
+      if(response.statusText !== 'OK') {
+        //setAddBrandError(true)
+        throw new Error(response.data.message);
+      }
+   
+    })
+    .catch((error) => {
+      //setAddBrandError(true)
+      return { error: error.response.data.message || error.message };
+    }) 
+  },[])
+
+  // const removeClick = useCallback(() => {
+  //   //console.log(document.querySelector('#editBrandModel')?.classList);
+  //   axios
+  //   .get(`api/products/brand/remove/${id}`)
+  //   .then((response) => {
+  //     if(response.statusText !== 'OK') {
+  //       throw new Error(response.data.message);
+  //     }
+  //     // 데이터를 받아온 후 처리해야할 부분(자동 새로고침)
+  //     //console.log(mutate('api/products/brand'))
+  //     // return mutate('api/products/brand'); 서버로부터 재요청 || 캐싱된 데이터
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     return { error: error.response.data.message || error.message };
+  //   }) 
+  // },[id])
+
+  useEffect(() => {
+    axios
+    .get('api/products')
+    .then((response) => {
+      if(response.statusText !== 'OK') {
+        //setAddBrandError(true)
+        throw new Error(response.data.message);
+      }
+      setProducts(response?.data)
+    })
+    .catch((error) => {
+      //setAddBrandError(true)
+      return { error: error.response.data.message || error.message };
+    }) 
+  },[])
+
+  const getProducts = () => {
     axios
     .get('api/products')
     .then((response) => {
@@ -174,8 +234,8 @@ const Product = () => {
                           Action <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
-                          <li><button type="button" data-toggle="modal" data-target="#editProductModal"> <i className="glyphicon glyphicon-edit"></i> Edit</button></li>
-                          <li><button type="button" data-toggle="modal" data-target="#removeProductModal"> <i className="glyphicon glyphicon-trash"></i> Remove</button></li>       
+                          <li><button onClick={() => editClick(product.product_id)} type="button" data-toggle="modal" data-target="#editProductModal"> <i className="glyphicon glyphicon-edit"></i> Edit</button></li>
+                          <li><button onClick={() => setId(String(product.product_id))} type="button" data-toggle="modal" data-target="#removeProductModal"> <i className="glyphicon glyphicon-trash"></i> Remove</button></li>       
                         </ul>
                       </div>
                     </td>
@@ -198,10 +258,9 @@ const Product = () => {
   <AddProduct 
     addSubmit={addSubmit}
     formRef={formRef} 
-    image={image}
     onChangeImage={onChangeImage}
-    name={name}
-    onChangeName={onChangeName}
+    productname={productname}
+    onChangeProductname={onChangeProductname}
     colour={colour}
     onChangeColour={onChangeColour}
     size={size}
@@ -216,175 +275,45 @@ const Product = () => {
     onChangeBrandname={onChangeBrandname}
     categoryname={categoryname}
     onChangeCategoryname={onChangeCategoryname}
-    status={status}
-    onChangeStatus={onChangeStatus}
+    productstatus={productstatus}
+    onChangeProductstatus={onChangeProductstatus}
     link={link}
     onChangeLink={onChangeLink}
     brands={brands} 
     categories={categories}        
-/>            
-  {/*<!-- /add categories -->*/}
+  />            
 
-  {/*<!-- edit categories brand -->*/}
-  <div className="modal fade" id="editProductModal" tabIndex={-1} role="dialog">
-    <div className="modal-dialog">
-      <div className="modal-content">
-              
-          <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 className="modal-title"><i className="fa fa-edit"></i> Edit Product</h4>
-          </div>
-          <div className="modal-body" style={{ maxHeight:'450px', overflow:'auto' }}>
-
-            <div className="div-loading">
-              <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div className="div-result">
-
-            {/*<!-- Nav tabs -->*/}
-            <ul className="nav nav-tabs" role="tablist">
-              <li role="presentation" className="active"><a href="#photo" aria-controls="home" role="tab" data-toggle="tab">Photo</a></li>
-              <li role="presentation"><a href="#productInfo" aria-controls="profile" role="tab" data-toggle="tab">Product Info</a></li>    
-            </ul>
-
-            {/*<!-- Tab panes -->*/}
-            <div className="tab-content">
-
-              
-              <div role="tabpanel" className="tab-pane active" id="photo">
-                <form id="updateProductImageForm" className="form-horizontal" >
-
-                <br />
-                <div id="edit-productPhoto-messages"></div>
-
-                <div className="form-group">
-                  <label htmlFor="editProductImage" className="col-sm-3 control-label">Product Image: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">							    				   
-                    <img src="" id="getProductImage" className="thumbnail" style={{ width: '250px', height: '250px' }} alt='productname' />
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	     	           	       
-                
-                <div className="form-group">
-                  <label htmlFor="editProductImage" className="col-sm-3 control-label">Select Photo: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    {/*<!-- the avatar markup -->*/}
-                    <div id="kv-avatar-errors-1" className="center-block" style={{ display: 'none' }} ></div>							
-                    <div className="kv-avatar center-block">					        
-                        <input type="file" className="form-control file-loading" id="editProductImage" placeholder="Product Name" name="editProductImage" style={{ width: 'auto' }} />
-                    </div>
-                    
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	     	           	       
-
-                <div className="modal-footer editProductPhotoFooter">
-                  <button type="button" className="btn btn-default" data-dismiss="modal"> <i className="glyphicon glyphicon-remove-sign"></i> Close</button>
-                  
-                  {/*<!-- <button type="submit" className="btn btn-success" id="editProductImageBtn" data-loading-text="Loading..."> <i className="glyphicon glyphicon-ok-sign"></i> Save Changes</button> -->*/}
-                </div>
-                {/*<!-- /modal-footer -->*/}
-                </form>
-                {/*<!-- /form -->*/}
-              </div>
-              {/*<!-- product image -->*/}
-              <div role="tabpanel" className="tab-pane" id="productInfo">
-                <form className="form-horizontal" id="editProductForm">				    
-                <br />
-
-                <div id="edit-product-messages"></div>
-
-                <div className="form-group">
-                  <label htmlFor="editProductName" className="col-sm-3 control-label">Product Name: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <input type="text" className="form-control" id="editProductName" placeholder="Product Name" name="editProductName" autoComplete="off" />
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	    
-
-                <div className="form-group">
-                  <label htmlFor="editQuantity" className="col-sm-3 control-label">Quantity: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <input type="text" className="form-control" id="editQuantity" placeholder="Quantity" name="editQuantity" autoComplete="off" />
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	        	 
-
-                <div className="form-group">
-                  <label htmlFor="editRate" className="col-sm-3 control-label">Rate: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <input type="text" className="form-control" id="editRate" placeholder="Rate" name="editRate" autoComplete="off" />
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	     	        
-
-                <div className="form-group">
-                  <label htmlFor="editBrandName" className="col-sm-3 control-label">Brand Name: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <select className="form-control" id="editBrandName" name="editBrandName">
-                      <option value="">--SELECT--</option>
-                      {brands?.map((brand, index) => {
-                        return (
-                          <option key={brand.brand_id} value={index+1}>{brand.brand_name}</option>
-                        )
-                      })
-                    }
-                    </select>
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	
-
-                <div className="form-group">
-                  <label htmlFor="editCategoryName" className="col-sm-3 control-label">Category Name: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <select className="form-control" id="editCategoryName" name="editCategoryName" >
-                      <option value="">--SELECT--</option>
-                      {categories?.map((cate,index) => {
-                        return (
-                          <option key={cate.categories_id} value={index+1}>{cate.categories_name}</option>
-                        )
-                      })       
-                   }
-                    </select>
-                  </div>
-                </div> {/*<!-- /form-group-->*/}					        	         	       
-
-                <div className="form-group">
-                  <label htmlFor="editProductStatus" className="col-sm-3 control-label">Status: </label>
-                  <label className="col-sm-1 control-label">: </label>
-                  <div className="col-sm-8">
-                    <select className="form-control" id="editProductStatus" name="editProductStatus">
-                      <option value="">--SELECT--</option>
-                      <option value="1">Available</option>
-                      <option value="2">Not Available</option>
-                    </select>
-                  </div>
-                </div> {/*<!-- /form-group-->*/}	         	        
-
-                <div className="modal-footer editProductFooter">
-                  <button type="button" className="btn btn-default" data-dismiss="modal"> <i className="glyphicon glyphicon-remove-sign"></i> Close</button>
-                  
-                  <button type="submit" className="btn btn-success" id="editProductBtn" data-loading-text="Loading..."> <i className="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
-                </div> {/*<!-- /modal-footer -->*/}				     
-                </form> {/*<!-- /.form -->*/}				     	
-              </div>    
-              {/*<!-- /product info -->*/}
-            </div>
-
-          </div>
-            
-          </div> {/*<!-- /modal-body -->*/}
-                  
-        
-      </div>
-      {/*<!-- /modal-content -->*/}
-    </div>
-    {/*<!-- /modal-dailog -->*/}
-  </div>
-  {/*<!-- /categories brand -->*/}
+  {/*<!-- edit product -->*/}
+  {/* <EditProduct
+    editSubmit={addSubmit}
+    formRef={formRef} 
+    name={name}
+    setName={setName}
+    colour={colour}
+    setColour={setColour}
+    size={size}
+    setSize={setSize}
+    priceUk={priceUk}
+    setPriceUk={setPriceUk}
+    priceKr={priceKr}
+    setPriceKr={setPriceKr}
+    quantity={quantity}
+    setQuantity={setQuantity}
+    brandname={brandname}
+    setBrandname={setBrandname}
+    categoryname={categoryname}
+    setCategoryname={setCategoryname}
+    status={status}
+    setStatus={setStatus}
+    link={link}
+    setLink={setLink}
+    brands={brands} 
+    categories={categories}  
+    productname={productname}
+    setProductname={setProductname}
+    productstatus={productstatus}
+    setStatus={setStatus}      
+    />          */}
 
   {/*<!-- remove categories brand -->*/}
   <div className="modal fade" id="removeProductModal" tabIndex={-1} role="dialog">

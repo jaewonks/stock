@@ -1,12 +1,54 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { db } from '../server.js';
+import multer from "multer";
+import path from "path";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, path.basename(file.originalname, ext) + "-" + Date.now() + ext);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype == "image/jpg") {
+    cb(null, true);
+      } else {
+          cb(null, false);
+          return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+      }
+};
+
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.post('/', expressAsyncHandler( async (req,res) => {
-  const image = req.body.image;
-  const name = req.body.name;
+router.get('/', expressAsyncHandler( async (req,res) => {
+  db.query(
+    'SELECT products.product_id, products.product_date, products.product_name, products.product_image, products.product_colour, products.product_size ,products.price_uk, products.price_kr, products.quantity, products.brand_id, products.categories_id, products.link, products.active, products.status, brands.brand_name, categories.categories_name FROM products INNER JOIN brands ON products.brand_id = brands.brand_id INNER JOIN categories ON products.categories_id = categories.categories_id WHERE products.status = 1',
+    (err, result) => {
+      if(err) {
+        console.log({ error: err });
+      }
+      if(result) {
+        res.send(result)
+      } else {
+        res.send({ message: "Fail to bring productlist" })
+      }
+    }
+  )
+}))
+
+router.post('/', upload.single('image'), expressAsyncHandler( async (req,res) => {
+  console.log("file",req.file)
+  console.log(req.body)
+  const image = `/images/stock/${req.file.filename}`;
+  const name = req.body.productname;
   const colour = req.body.colour;
   const size = req.body.size;
   const priceUk = req.body.priceUk;
@@ -14,7 +56,7 @@ router.post('/', expressAsyncHandler( async (req,res) => {
   const quantity = req.body.quantity;
   const brandname = req.body.brandname;
   const categoryname = req.body.categoryname;
-  const status = parseInt(req.body.status);
+  const status = parseInt(req.body.productstatus);
   const link = req.body.link;
   db.query(
     "INSERT INTO products (product_name, product_image, product_colour, product_size, price_uk, price_kr, quantity, brand_id, categories_id, link, active, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -29,9 +71,23 @@ router.post('/', expressAsyncHandler( async (req,res) => {
   )
 }))
 
-router.get('/', expressAsyncHandler( async (req,res) => {
+router.put('/:id', expressAsyncHandler( async (req,res) => {
+  const id = parseInt(req.params.id); 
+  const image = `/images/stock/${req.file.filename}`;
+  const name = req.body.name;
+  const colour = req.body.colour;
+  const size = req.body.size;
+  const priceUk = req.body.priceUk;
+  const priceKr = req.body.priceKr;
+  const quantity = req.body.quantity;
+  const brandname = req.body.brandname;
+  const categoryname = req.body.categoryname;
+  const status = parseInt(req.body.status);
+  const link = req.body.link;
+  console.log(req.body);
   db.query(
-    'SELECT products.product_id, products.product_date, products.product_name, products.product_image, products.product_colour, products.product_size ,products.price_uk, products.price_kr, products.quantity, products.brand_id, products.categories_id, products.link, products.active, products.status, brands.brand_name, categories.categories_name FROM products INNER JOIN brands ON products.brand_id = brands.brand_id INNER JOIN categories ON products.categories_id = categories.categories_id WHERE products.status = 1',
+    "UPDATE brands SET product_name = ?, product_image = ?, product_colour = ?, product_size = ?, price_uk = ?, price_kr = ?, quantity = ?, brand_id = ?, categories_id = ?, link = ?, active = ?, status = ? WHERE brand_id = ?",
+    [ name, image, colour, size, priceUk, priceKr, quantity, brandname, categoryname, link, status, id ],
     (err, result) => {
       if(err) {
         console.log({ error: err });
@@ -39,7 +95,7 @@ router.get('/', expressAsyncHandler( async (req,res) => {
       if(result) {
         res.send(result)
       } else {
-        res.send({ message: "Fail to bring productlist" })
+        res.send({ message: 'Failed to register brand' })
       }
     }
   )

@@ -25,6 +25,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use(express.static('public'));
+app.use('/images/stock',express.static('uploads'));
+
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 //app.use('/api/orders', orderRouter);

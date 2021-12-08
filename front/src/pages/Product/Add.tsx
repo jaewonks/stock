@@ -4,10 +4,9 @@ import { IBrand, ICate } from '../../typings/db';
 interface Props {
   addSubmit: any;
   formRef: any;
-  image: string; 
   onChangeImage: any;
-  name: string; 
-  onChangeName: any;
+  productname: string; 
+  onChangeProductname: any;
   colour: string; 
   onChangeColour: any;
   size: string;
@@ -22,8 +21,8 @@ interface Props {
   onChangeBrandname: any;
   categoryname: string; 
   onChangeCategoryname: any;
-  status: string; 
-  onChangeStatus: any;
+  productstatus: string; 
+  onChangeProductstatus: any;
   link: string; 
   onChangeLink: any; 
   brands: IBrand[];
@@ -33,10 +32,9 @@ interface Props {
 const AddProduct: FC<Props>= ({ 
   addSubmit,
   formRef, 
-  image, 
   onChangeImage,
-  name,
-  onChangeName,
+  productname,
+  onChangeProductname,
   colour,
   onChangeColour,
   size,
@@ -51,13 +49,14 @@ const AddProduct: FC<Props>= ({
   onChangeBrandname,
   categoryname,
   onChangeCategoryname,
-  status,
-  onChangeStatus,
+  productstatus,
+  onChangeProductstatus,
   link,
   onChangeLink,
   brands,
   categories
 }) => {
+  console.log("brandname",brandname);
   return (
     <div className="modal fade" id="addProductModal" tabIndex={-1} role="dialog">
     <div className="modal-dialog">
@@ -80,7 +79,7 @@ const AddProduct: FC<Props>= ({
                 {/*<!-- the avatar markup -->*/}
                 <div id="kv-avatar-errors-1" className="center-block" style={{ display: 'none' }}></div>							
                 <div className="kv-avatar center-block">					        
-                    <input type="file" className="form-control file-loading" id="productImage" placeholder="Product Name" name="productImage" style={{ width: 'auto' }} value={image} onChange={onChangeImage} />
+                    <input type="file" className="form-control file-loading" id="productImage" placeholder="Product Name" name="productImage" style={{ width: 'auto' }} onChange={onChangeImage} />
                 </div>
                 
               </div>
@@ -90,7 +89,7 @@ const AddProduct: FC<Props>= ({
               <label htmlFor="productName" className="col-sm-3 control-label">Product Name </label>
               <label className="col-sm-1 control-label">: </label>
               <div className="col-sm-8">
-                <input type="text" className="form-control" id="productName" placeholder="product name" name="productName" autoComplete="off" value={name} onChange={onChangeName} />
+                <input type="text" className="form-control" id="productName" placeholder="product name" name="productName" autoComplete="off" value={productname} onChange={onChangeProductname} />
               </div>
             </div> {/*<!-- /form-group-->*/}	    
 
@@ -141,6 +140,7 @@ const AddProduct: FC<Props>= ({
                 <select className="form-control" id="brandName" name="brandName" value={brandname} onChange={onChangeBrandname} >
                   <option value="">--SELECT--</option>
                   {brands?.map((brand) => {
+                    console.log("brand: ", brand)
                     return (
                       <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
                     )
@@ -186,7 +186,7 @@ const AddProduct: FC<Props>= ({
               <label htmlFor="productStatus" className="col-sm-3 control-label">Status </label>
               <label className="col-sm-1 control-label">: </label>
               <div className="col-sm-8">
-                <select className="form-control" id="productStatus" name="productStatus" value={status} onChange={onChangeStatus} >
+                <select className="form-control" id="productStatus" name="productStatus" value={productstatus} onChange={onChangeProductstatus} >
                   <option value="">--SELECT--</option>
                   <option value="1">Available</option>
                   <option value="2">Not Available</option>
@@ -197,7 +197,6 @@ const AddProduct: FC<Props>= ({
           
           <div className="modal-footer">
             <button type="button" className="btn btn-default" data-dismiss="modal"> <i className="glyphicon glyphicon-remove-sign"></i> Close</button>
-            
             <button type="submit" className="btn btn-primary" id="createProductBtn" data-loading-text="Loading..."> <i className="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
           </div> {/*<!-- /modal-footer -->*/}	      
         </form> {/*<!-- /.form -->*/}	     
