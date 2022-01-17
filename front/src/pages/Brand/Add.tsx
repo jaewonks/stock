@@ -1,17 +1,19 @@
 import { FC } from 'react'
 
 interface Props {
-  addBrand: boolean
-  addBrandError: boolean
-  addSubmit: any
+  addBrand: boolean;
+  addBrandError: boolean;
+  addSubmit: any;
   formRef: any;
-  emptybrandname: string
-  emptybrandstatus: string
-  brandname: string
-  onChangeBrandname: any
-  brandstatus: string
-  onChangeBrandstatus: any
-  loading: boolean
+  emptybrandname: string;
+  emptybrandstatus: string;
+  brandname: string;
+  onChangeBrandname: any;
+  brandabbre: string;
+  onChangeBrandabbre: any;
+  brandstatus: string;
+  onChangeBrandstatus: any;
+  loading: boolean;
 }
 
 const AddBrand: FC<Props>= ({ 
@@ -23,6 +25,8 @@ const AddBrand: FC<Props>= ({
   emptybrandstatus,
   brandname,
   onChangeBrandname,
+  brandabbre,
+  onChangeBrandabbre,
   brandstatus,
   onChangeBrandstatus,
   loading
@@ -60,7 +64,15 @@ const AddBrand: FC<Props>= ({
                   <input type="text" className="form-control" id="brandName" placeholder="Brand Name" name="brandName" value={brandname} onChange={onChangeBrandname} autoComplete="off" />
                   <p className="text-danger">{emptybrandname}</p>
                 </div>
-              </div> {/* <!-- /form-group--> */}	         	        
+              </div> {/* <!-- /form-group--> */}	  
+              <div className="form-group" ref={formRef}>
+                <label htmlFor="brandAbbre" className="col-sm-3 control-label">Brand Acronmy </label>
+                <label className="col-sm-1 control-label">: </label>
+                <div className="col-sm-8">
+                  <input type="text" className="form-control" id="brandAbbre" placeholder="Brand Abbre" name="brandAbbre" value={brandabbre} onChange={onChangeBrandabbre} autoComplete="off" />
+                  <p className="text-danger"></p>
+                </div>
+              </div> {/* <!-- /form-group--> */}       	        
               <div className="form-group" ref={formRef}>
                 <label htmlFor="brandStatus" className="col-sm-3 control-label">Status: </label>
                 <label className="col-sm-1 control-label">: </label>

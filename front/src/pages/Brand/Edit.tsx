@@ -3,12 +3,14 @@ import { FC } from 'react'
 interface Props {
   name: string;
   setName: any;
+  abbre: string;
+  setAbbre: any;
   status: string;
   setStatus: any;
   editSubmit: any;
 }
 
-const EditBrand: FC<Props> = ({ editSubmit, name, setName, status, setStatus }) => {
+const EditBrand: FC<Props> = ({ editSubmit, name, setName, abbre, setAbbre, status, setStatus }) => {
   return (
     <div className="modal fade" id="editBrandModel" tabIndex={-1} role="dialog">
       <div className="modal-dialog">
@@ -33,7 +35,15 @@ const EditBrand: FC<Props> = ({ editSubmit, name, setName, status, setStatus }) 
                     <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="editBrandName" name="editBrandName" autoComplete="off" />
                     <p className="text-danger"></p>
                   </div>
-                </div> {/* <!-- /form-group--> */}	         	        
+                </div> {/* <!-- /form-group--> */}	
+                <div className="form-group">
+                  <label htmlFor="editBrandAbbre" className="col-sm-3 control-label">Brand Acronmy: </label>
+                  <label className="col-sm-1 control-label">: </label>
+                  <div className="col-sm-8">
+                    <input value={abbre} onChange={(e) => setAbbre(e.target.value)} type="text" className="form-control" id="editBrandAbbre" name="editBrandAbbre" autoComplete="off" />
+                    <p className="text-danger"></p>
+                  </div>
+                </div> {/* <!-- /form-group--> */}  	         	        
                 <div className="form-group">
                   <label htmlFor="editBrandStatus" className="col-sm-3 control-label">Status: </label>
                   <label className="col-sm-1 control-label">: </label>

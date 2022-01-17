@@ -38,7 +38,6 @@ const Categories = () => {
   },[categoriesname, categoriesstatus]);
 
   const editSubmit = useCallback((e) => {
-    console.log(name, status, id)
     e.preventDefault();
     //document.querySelector('#editBrandModel')?.classList.add('div-hide'); 
     axios
@@ -106,7 +105,7 @@ const Categories = () => {
         return { error: error.response.data.message || error.message };
     })
   },[setCategories])
-  console.log(id)
+  
   return (
     <div className="container">
     <div className="row">
@@ -151,8 +150,14 @@ const Categories = () => {
                             Action <span className="caret"></span>
                           </button>
                           <ul className="dropdown-menu">
-                            <li><button onClick={() => editClick(cat.categories_id)} type='button' data-toggle="modal" data-target="#editCategoriesModal" > <i className="glyphicon glyphicon-edit"></i> Edit</button></li>
-                            <li><button onClick={() => setId(String(cat.categories_id))} type='button' data-toggle="modal" data-target="#removeCategoriesModal"> <i className="glyphicon glyphicon-trash"></i> Remove</button></li>       
+                            <li>
+                              <button onClick={() => editClick(cat.categories_id)} type='button' data-toggle="modal" data-target="#editCategoriesModal" > 
+                              <i className="glyphicon glyphicon-edit"></i> Edit</button>
+                            </li>
+                            <li>
+                              <button onClick={() => setId(String(cat.categories_id))} type='button' data-toggle="modal" data-target="#removeCategoriesModal"> 
+                              <i className="glyphicon glyphicon-trash"></i> Remove</button>
+                            </li>       
                           </ul>
                         </div>
                       </td>

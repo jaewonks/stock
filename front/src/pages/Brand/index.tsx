@@ -13,8 +13,10 @@ const Brand = () => {
   const { mutate } = useSWR('api/products/brand', fetcher, { revalidateIfStale : true });
   const [ brands, setBrands ] = useState<IBrand[]>([]);
   const [ brandname, onChangeBrandname ] = useInput('');
+  const [ brandabbre, onChangeBrandabbre ] = useInput('');
   const [ brandstatus, onChangeBrandstatus ] = useInput('');
   const [ emptybrandname, setEmptybrandname ] = useState('');
+  const [ emptybrandabbre, setEmptybrandabbre ] = useState('');
   const [ emptybrandstatus, setEmptybrandstatus ] = useState('');
   const [ addBrand, setAddBrand ] = useState(false);
   const [ addBrandError, setAddBrandError ] = useState(false);
@@ -22,6 +24,7 @@ const Brand = () => {
   const formRef = useRef<HTMLDivElement>(null);
 
   const [ name, setName ] = useState('');
+  const [ abbre, setAbbre ] = useState('');
   const [ status, setStatus ] = useState('');
   const [ id, setId ] = useState('');
 
@@ -41,6 +44,7 @@ const Brand = () => {
     axios
       .post('api/products/brand', {
         brandname,
+        brandabbre,
         brandstatus
       })
       .then((response) => {
@@ -59,18 +63,21 @@ const Brand = () => {
         throw error.response?.data?.statusCode;
       })
 
-  },[brandname,
+  },[
+    brandname,
+    brandabbre,
     brandstatus,
     setEmptybrandname,
-    setEmptybrandstatus]);
+    setEmptybrandstatus
+  ]);
   
   const editSubmit = useCallback((e) => {
-    console.log(name, status, id)
     e.preventDefault();
     //document.querySelector('#editBrandModel')?.classList.add('div-hide'); 
     axios
       .put(`api/products/brand/${id}`, {
         name, 
+        abbre,
         status
       })
       .then((response) => {
@@ -83,7 +90,7 @@ const Brand = () => {
         throw error.response?.data?.statusCode;
       })
     return false;
-  },[name, status, id])
+  },[name, abbre, status, id])
 
   const editClick = useCallback((id: IBrand['brand_id']) => {
     axios
@@ -94,6 +101,7 @@ const Brand = () => {
         throw new Error(response.data.message);
       }
       setName(response.data[0].brand_name)
+      setAbbre(response.data[0].brand_abbre)
       setStatus(response.data[0].brand_active)
       setId(response.data[0].brand_id)
     })
@@ -161,6 +169,7 @@ const Brand = () => {
               <thead>
                 <tr role='row'>							
                   <th>Brand Name</th>
+                  <th>Brand Acronmy</th>
                   <th>Status</th>
                   <th style={{ width: '15%' }} >Options</th>
                 </tr>
@@ -170,6 +179,7 @@ const Brand = () => {
                   return (
                     <tr key={brand.brand_id} role='row' className={index%2 === 0? 'even':'odd'}>
                       <td>{brand.brand_name}</td>
+                      <td>{brand.brand_abbre}</td>
                       <td>{brand.brand_active === 1 ? 
                       <label className='label label-success'>Available</label> : <label className='label label-danger'>Not Available</label> }
                       </td>
@@ -208,12 +218,14 @@ const Brand = () => {
       emptybrandstatus={emptybrandstatus}
       brandname={brandname}
       onChangeBrandname={onChangeBrandname}
+      brandabbre={brandabbre}
+      onChangeBrandabbre={onChangeBrandabbre}
       brandstatus={brandstatus}
       onChangeBrandstatus={onChangeBrandstatus}
       loading={loading}
      />         
     {/* <!-- Edit Brand --> */}
-     <EditBrand editSubmit={editSubmit} name={name} setName={setName} status={status} setStatus={setStatus} />         
+     <EditBrand editSubmit={editSubmit} name={name} setName={setName} abbre={abbre} setAbbre={setAbbre} status={status} setStatus={setStatus} />         
     {/* <!-- Remove Brand --> */}
      <RemoveBrand removeClick={removeClick} />      
   </div>   

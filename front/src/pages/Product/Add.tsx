@@ -56,13 +56,12 @@ const AddProduct: FC<Props>= ({
   brands,
   categories
 }) => {
-  console.log("brandname",brandname);
   return (
     <div className="modal fade" id="addProductModal" tabIndex={-1} role="dialog">
     <div className="modal-dialog">
       <div className="modal-content">
 
-        <form onSubmit={addSubmit} className="form-horizontal" id="submitProductForm">
+        <form onSubmit={addSubmit} className="form-horizontal">
           <div className="modal-header">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 className="modal-title"><i className="fa fa-plus"></i> Add Product</h4>
@@ -140,7 +139,6 @@ const AddProduct: FC<Props>= ({
                 <select className="form-control" id="brandName" name="brandName" value={brandname} onChange={onChangeBrandname} >
                   <option value="">--SELECT--</option>
                   {brands?.map((brand) => {
-                    console.log("brand: ", brand)
                     return (
                       <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
                     )

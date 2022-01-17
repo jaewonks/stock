@@ -3,67 +3,86 @@ import { IBrand, ICate } from '../../typings/db';
 interface Props {
   editSubmit: any;
   formRef: any;
-  image: string; 
-  setImage: any;
-  name: string; 
-  setName: any;
-  colour: string; 
-  setColour: any;
-  size: string;
-  setSize: any;
-  priceUk: string; 
-  setPriceUk: any;
-  priceKr: string; 
-  setPriceKr: any;
-  quantity: string; 
-  setQuantity: any;
-  brandname: string; 
-  setBrandname: any;
-  categoryname: string; 
-  setCategoryname: any;
-  status: string; 
-  setStatus: any;
-  link: string; 
-  setLink: any; 
+  _image: string;
+  set_image: any;
+  _name: string;
+  set_name: any;
+  _colour: string;
+  set_colour: any;
+  _size: string;
+  set_size: any;
+  _priceUk: string;
+  set_priceUk: any;
+  _priceKr: string;
+  set_priceKr: any;
+  _quantity: string;
+  set_quantity: any;
+  _brandname: string;
+  set_brandname: any;
+  _categoryname: string;
+  set_categoryname: any;
+  _status: string;
+  set_status: any;
+  _link: string;
+  set_link: any;
   brands: IBrand[];
   categories: ICate[];
+  preview: null,
+  setPreview: any;
 }
 
 const EditProduct: FC<Props> = ({ 
   editSubmit,
   formRef, 
-  // image, 
-  // setImage,
-  name,
-  setName,
-  colour,
-  setColour,
-  size,
-  setSize,
-  priceUk,
-  setPriceUk,
-  priceKr,
-  setPriceKr,
-  quantity,
-  setQuantity,
-  brandname,
-  setBrandname,
-  categoryname,
-  setCategoryname,
-  status,
-  setStatus,
-  link,
-  setLink,
+  _image,
+  set_image,
+  _name,
+  set_name,
+  _colour,
+  set_colour,
+  _size,
+  set_size,
+  _priceUk,
+  set_priceUk,
+  _priceKr,
+  set_priceKr,
+  _quantity,
+  set_quantity,
+  _brandname,
+  set_brandname,
+  _categoryname,
+  set_categoryname,
+  _status,
+  set_status,
+  _link,
+  set_link,
   brands,
-  categories
+  categories,
+  preview,
+  setPreview  
 }) => {
+
+  const onChangeImage = (e: any) => {
+    if(e.target.files[0]) {
+      console.log(e.target.files)
+      set_image(e.target.files[0]);
+
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        setPreview(reader.result);
+      })
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
   return (
-    <div className="modal fade" id="productModal" tabIndex={-1} role="dialog">
+    <div className="modal fade" id="editProductModal" tabIndex={-1} role="dialog">
     <div className="modal-dialog">
       <div className="modal-content">
               
           <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
             <h4 className="modal-title"><i className="fa fa-edit"></i> Edit Product</h4>
           </div>
           <div className="modal-body" style={{ maxHeight:'450px', overflow:'auto' }}>
@@ -88,21 +107,21 @@ const EditProduct: FC<Props> = ({
                 <br />
                 <div id="edit-productPhoto-messages"></div>
                 <div className="form-group">
-                  <label htmlFor="productImage" className="col-sm-3 control-label">Product Image: </label>
+                  <label htmlFor="productImage" className="col-sm-3 control-label">Product Image </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">							    				   
-                    <img src="" id="getProductImage" className="thumbnail" style={{ width: '250px', height: '250px' }} alt='productname' />
+                    <img src={preview?preview:_image} id="getProductImage" className="thumbnail" style={{ width: '250px', height: '250px' }} alt='productname' />
                   </div>
                 </div> {/*<!-- /form-group-->*/}	     	           	       
                 
                 <div className="form-group">
-                  <label htmlFor="productImage" className="col-sm-3 control-label">Select Photo: </label>
+                  <label htmlFor="productImage" className="col-sm-3 control-label">Select Photo </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
                     {/*<!-- the avatar markup -->*/}
                     <div id="kv-avatar-errors-1" className="center-block" style={{ display: 'none' }} ></div>							
                     <div className="kv-avatar center-block">					        
-                        <input type="file" className="form-control file-loading" id="productImage" placeholder="Product Name" name="productImage" style={{ width: 'auto' }} />
+                    <input onChange={onChangeImage} type="file" className="form-control file-loading" id="productImage" name="productImage" style={{ width: 'auto' }} />
                     </div>
                   </div>
                 </div> {/*<!-- /form-group-->*/}	     	           	       
@@ -125,7 +144,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="productName" className="col-sm-3 control-label">Product Name: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="productName" placeholder="Product Name" name="productName" autoComplete="off" />
+                    <input value={_name} onChange={(e) => set_name(e.target.value)} type="text" className="form-control" id="productName" name="productName" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}	
 
@@ -133,7 +152,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editColour" className="col-sm-3 control-label">Colour: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={colour} onChange={(e) => setColour(e.target.value)} type="text" className="form-control" id="editColour" name="editColour" autoComplete="off" />
+                    <input value={_colour} onChange={(e) => set_colour(e.target.value)} type="text" className="form-control" id="editColour" name="editColour" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}   
 
@@ -141,7 +160,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editSize" className="col-sm-3 control-label">Size: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={size} onChange={(e) => setSize(e.target.value)} type="text" className="form-control" id="editSize" name="editSize" autoComplete="off" />
+                    <input value={_size} onChange={(e) => set_size(e.target.value)} type="text" className="form-control" id="editSize" name="editSize" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}  
 
@@ -149,7 +168,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="priceUk" className="col-sm-3 control-label">price(Uk): </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={priceUk} onChange={(e) => setPriceUk(e.target.value)} type="text" className="form-control" id="priceUk" name="priceUk" autoComplete="off" />
+                    <input value={_priceUk} onChange={(e) => set_priceUk(e.target.value)} type="text" className="form-control" id="priceUk" name="priceUk" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}	      	 
 
@@ -157,7 +176,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="priceKr" className="col-sm-3 control-label">price(KR): </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={priceKr} onChange={(e) => setPriceKr(e.target.value)} type="text" className="form-control" id="priceKr" name="priceKr" autoComplete="off" />
+                    <input value={_priceKr} onChange={(e) => set_priceKr(e.target.value)} type="text" className="form-control" id="priceKr" name="priceKr" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}	  
 
@@ -165,7 +184,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editQuantity" className="col-sm-3 control-label">Quantity: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="text" className="form-control" id="editQuantity" name="editQuantity" autoComplete="off" />
+                    <input value={_quantity} onChange={(e) => set_quantity(e.target.value)} type="text" className="form-control" id="editQuantity" name="editQuantity" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}     	        
 
@@ -173,7 +192,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editBrandName" className="col-sm-3 control-label">Brand Name: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <select value={brandname} onChange={(e) => setBrandname(e.target.value)} className="form-control" id="editBrandName" name="editBrandName">
+                    <select value={_brandname} onChange={(e) => set_brandname(e.target.value)} className="form-control" id="editBrandName" name="editBrandName">
                       <option value="">--SELECT--</option>
                       {brands?.map((brand, index) => {
                         return (
@@ -189,7 +208,7 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editCategoryName" className="col-sm-3 control-label">Category Name: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <select value={categoryname} onChange={(e) => setCategoryname(e.target.value)} className="form-control" id="editCategoryName" name="editCategoryName" >
+                    <select value={_categoryname} onChange={(e) => set_categoryname(e.target.value)} className="form-control" id="editCategoryName" name="editCategoryName" >
                       <option value="">--SELECT--</option>
                       {categories?.map((cate,index) => {
                         return (
@@ -205,15 +224,15 @@ const EditProduct: FC<Props> = ({
                   <label htmlFor="editLink" className="col-sm-3 control-label">Link: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                  <input value={link} onChange={(e) => setLink(e.target.value)} type="text" className="form-control" id="priceKr" name="priceKr" autoComplete="off" />
+                  <input value={_link} onChange={(e) =>set_link(e.target.value)} type="text" className="form-control" id="priceKr" name="priceKr" autoComplete="off" />
                   </div>
                 </div> {/*<!-- /form-group-->*/}	
 
                 <div className="form-group">
-                  <label htmlFor="productStatus" className="col-sm-3 control-label">Status: </label>
+                  <label htmlFor="editProductStatus" className="col-sm-3 control-label">Status: </label>
                   <label className="col-sm-1 control-label">: </label>
                   <div className="col-sm-8">
-                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="form-control" id="productStatus" name="productStatus">
+                    <select value={_status} onChange={(e) =>set_status(e.target.value)} className="form-control" id="editProductStatus" name="editProductStatus">
                       <option value="">--SELECT--</option>
                       <option value="1">Available</option>
                       <option value="2">Not Available</option>
@@ -221,9 +240,11 @@ const EditProduct: FC<Props> = ({
                   </div>
                 </div> {/*<!-- /form-group-->*/}	
 
-                <div className="modal-footer productFooter">
-                  <button type="button" className="btn btn-default" data-dismiss="modal"> <i className="glyphicon glyphicon-remove-sign"></i> Close</button>
-                  <button type="submit" className="btn btn-success" id="productBtn" data-loading-text="Loading..."> <i className="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
+                <div className="modal-footer editProductFooter">
+                  <button type="button" className="btn btn-default" data-dismiss="modal"> 
+                  <i className="glyphicon glyphicon-remove-sign"></i> Close</button>
+                  <button onSubmit={editSubmit} type="submit" className="btn btn-success" id="productBtn" data-loading-text="Loading..."> 
+                  <i className="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
                 </div> {/*<!-- /modal-footer -->*/}				     
                 </form> {/*<!-- /.form -->*/}				     	
               </div>    

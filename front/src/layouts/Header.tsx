@@ -39,10 +39,13 @@ const Header = () => {
           <li id="navCategories"><Link to="categories"> <i className="glyphicon glyphicon-th-list"></i> Category</Link></li>        
 
           <li id="navProduct"><Link to="product"> <i className="glyphicon glyphicon-ruble"></i> Product </Link></li>     
+          
+          <li id="navStock"><Link to="stock"> <i className="glyphicon glyphicon-ruble"></i> Stock </Link></li>     
 
           <li className="dropdown" id="navOrder">
             <Link to='#' className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i className="glyphicon glyphicon-shopping-cart"></i> Orders <span className="caret"></span></Link>
             <ul className="dropdown-menu">            
+              <li id=""><Link to="order/update"> <i className="glyphicon glyphicon-plus"></i> Update Orders</Link></li>            
               <li id="topNavAddOrder"><Link to="order/add"> <i className="glyphicon glyphicon-plus"></i> Add Orders</Link></li>            
               <li id="topNavManageOrder"><Link to="order/manage"> <i className="glyphicon glyphicon-edit"></i> Manage Orders</Link></li>            
             </ul>
